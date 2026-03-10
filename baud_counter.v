@@ -28,7 +28,7 @@ always @(posedge clk or posedge rst) begin
                 counter <= 0;
 
             else if(edge_count == 1) begin
-                baud_count <= counter << 1;
+                baud_count <= counter; 
                 baud_valid <= 1;
             end
         end
