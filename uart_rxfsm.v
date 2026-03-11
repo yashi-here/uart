@@ -11,6 +11,7 @@ module uart_rxfsm(
 reg [2:0] bit_index;
 reg [7:0] shift_reg;
 reg [3:0] state;
+reg first_byte_ignore;
 
 localparam IDLE  = 0;
 localparam START = 1;
@@ -23,7 +24,8 @@ always @(posedge clk or posedge rst) begin
         state <= IDLE;
         bit_index <= 0;
         data_valid <= 0;
-        data_out<=8'b0;
+        data_out <= 8'b0;
+          first_byte_ignore <= 1;
     end
     else begin
 
@@ -55,17 +57,21 @@ always @(posedge clk or posedge rst) begin
             if(sample_tick)
                 state <= DONE;
 
-        DONE:
-        begin
-            data_out <= shift_reg;
-            data_valid <= 1;
-            bit_index <= 0;
-            state <= IDLE;
-        end
+DONE:
+begin
+    if(first_byte_ignore) begin
+        first_byte_ignore <= 0;
+    end
+    else begin
+        data_out <= shift_reg;
+        data_valid <= 1;
+    end
 
+    bit_index <= 0;
+    state <= IDLE;
+end
         endcase
     end
 end
 
 endmodule
-
