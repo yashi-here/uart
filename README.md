@@ -193,7 +193,7 @@ RTL simulation was performed using **Xilinx Vivado Simulator**.
 
 The waveform verifies correct UART reception including edge detection, baud detection, and data sampling.
 
-![Waveform](outputs/waveform)
+![Waveform](outputs/waveform.png)
 
 ---
 
