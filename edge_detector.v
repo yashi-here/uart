@@ -5,15 +5,19 @@ module edge_detector(
     output edge_pulse
 );
 
-reg rx_d;
+reg rx_d1, rx_d2;
 
 always @(posedge clk or posedge rst) begin
-    if (rst)
-        rx_d <= 1'b1;   // UART idle state
-    else
-        rx_d <= rx;
+    if (rst) begin
+        rx_d1 <= 1'b1;
+        rx_d2 <= 1'b1;
+    end
+    else begin
+        rx_d1 <= rx;
+        rx_d2 <= rx_d1;
+    end
 end
 
-assign edge_pulse = rx ^ rx_d;
+assign edge_pulse = rx_d1 ^ rx_d2;
 
 endmodule
