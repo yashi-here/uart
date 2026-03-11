@@ -197,6 +197,9 @@ The waveform verifies correct UART reception including edge detection, baud dete
 
 ---
 
+# 🧩 Synthesized Layout
+
+![Layout](outputs/layout_images/synthesis_layout.png)
 # ⚡ RTL Synthesis (Cadence Genus)
 
 RTL synthesis was performed using **Cadence Genus**.
@@ -270,28 +273,28 @@ The design meets timing constraints comfortably for a **50 MHz clock**.
 | Terms to Instance Ratio | 4.18 |
 
 ---
+## 📂 Repository Structure
 
-# 📂 Repository Structure
+```
 uart-auto-baud/
 │
 ├── rtl/
-│ ├── edge_detector.v
-│ ├── baud_counter.v
-│ ├── baud_tick_gen.v
-│ ├── uart_rxfsm.v
-│ └── uart_auto_baud_top.v
+│   ├── edge_detector.v
+│   ├── baud_counter.v
+│   ├── baud_tick_gen.v
+│   ├── uart_rxfsm.v
+│   └── uart_auto_baud_top.v
 │
 ├── testbench/
-│ └── uart_auto_baud_tb.v
+│   └── uart_auto_baud_tb.v
 │
 ├── outputs/
-│ ├── waveform.png
-│ └── layout_images/
-│ └── synthesis_layout.png
+│   ├── waveform.png
+│   └── layout_images/
+│       └── synthesis_layout.png
 │
 └── README.md
-
----
+```
 
 # 📁 Folder Description
 
