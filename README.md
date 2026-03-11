@@ -1,28 +1,45 @@
 # 🚀 UART Receiver with Auto-Baud Detection
 
-### Verilog Implementation | Multi-Baud UART Receiver
-
-A **Verilog-based UART receiver** capable of **automatically detecting the baud rate** using an incoming synchronization byte (`0x55`).  
-
-The receiver dynamically measures the bit period and configures the sampling logic without manual baud rate configuration.
-
-This project demonstrates a **complete digital VLSI design flow** including RTL design, simulation, synthesis, and physical analysis.
+![Language](https://img.shields.io/badge/Language-Verilog-blue)
+![Simulation](https://img.shields.io/badge/Simulation-Vivado-orange)
+![Synthesis](https://img.shields.io/badge/Synthesis-Cadence%20Genus-green)
+![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
+![Domain](https://img.shields.io/badge/Domain-VLSI%20Design-purple)
 
 ---
 
-# 📌 Design Flow Coverage
+## 📌 Project Description
 
-| Design Stage | Tool Used |
-|--------------|-----------|
-| RTL Design | Verilog HDL |
-| Functional Simulation | Vivado Simulator |
-| Multi-Baud Waveform Verification | Vivado & Cadence |
-| RTL Synthesis | Cadence Genus |
-| Gate-Level Netlist Generation | Cadence Genus |
-| QoR Analysis | Cadence Genus |
-| Area Analysis | Cadence Genus |
-| Power Analysis | Cadence Genus |
-| Timing Analysis | Cadence Genus |
+This project implements a **UART Receiver with Auto-Baud Detection** using **Verilog HDL**.  
+The receiver automatically determines the baud rate using a synchronization byte (`0x55`) and configures its sampling logic accordingly.
+
+The design demonstrates a **complete digital VLSI design flow** including:
+
+✔ RTL Design  
+✔ Functional Simulation (Vivado)  
+✔ Waveform Verification (Vivado & Cadence)  
+✔ RTL Synthesis (Cadence Genus)  
+✔ Gate-Level Netlist Generation  
+✔ Quality of Results (QoR) Analysis  
+✔ Area Analysis  
+✔ Power Analysis  
+✔ Timing Analysis  
+
+---
+
+# 📊 Design Flow Coverage
+
+| Design Stage | Tool Used | Status |
+|--------------|-----------|--------|
+| RTL Design | Verilog HDL | ✅ Completed |
+| Functional Simulation | Vivado Simulator | ✅ Completed |
+| Waveform Verification | Vivado & Cadence | ✅ Completed |
+| RTL Synthesis | Cadence Genus | ✅ Completed |
+| Netlist Generation | Cadence Genus | ✅ Completed |
+| QoR Analysis | Cadence Genus | ✅ Completed |
+| Area Analysis | Cadence Genus | ✅ Completed |
+| Power Analysis | Cadence Genus | ✅ Completed |
+| Timing Analysis | Cadence Genus | ✅ Completed |
 
 ---
 
@@ -36,8 +53,8 @@ This project demonstrates a **complete digital VLSI design flow** including RTL 
 | Synthesis Tool | Cadence Genus |
 | Clock Frequency | 50 MHz |
 | Clock Period | 20 ns |
-| UART Frame | 1 Start, 8 Data, 1 Stop |
-| Detection Method | Edge-based Auto-Baud Detection |
+| UART Frame Format | 1 Start, 8 Data, 1 Stop |
+| Detection Method | Edge-Based Auto-Baud Detection |
 
 ---
 
@@ -48,16 +65,14 @@ This project demonstrates a **complete digital VLSI design flow** including RTL 
 | Clock Frequency | 50 MHz |
 | Clock Period | 20 ns |
 | Data Bits | 8 |
-| Start Bits | 1 |
-| Stop Bits | 1 |
+| Start Bit | 1 |
+| Stop Bit | 1 |
 | Parity | None |
 | Synchronization Byte | 0x55 |
 
 ---
 
 # 📡 Supported Baud Rates
-
-The design was verified with the following baud rates.
 
 | Baud Rate | Clock Cycles per Bit | Bit Time (ns) |
 |-----------|----------------------|---------------|
@@ -73,11 +88,13 @@ The detected bit time matches the testbench configuration, validating correct au
 
 # 🧠 Working Principle
 
-The receiver determines the baud rate using a synchronization byte:0x55
+The receiver determines the baud rate using the synchronization byte:
+0x55
 
-Binary representation:01010101
+Binary representation:
+01010101
 
-This pattern produces **transitions at every bit boundary**, enabling accurate measurement of the UART bit period.
+This bit pattern generates **transitions at every bit boundary**, enabling accurate measurement of the UART bit period.
 
 ### Detection Process
 
@@ -96,7 +113,7 @@ The synchronization byte is **used only for baud detection and ignored as data**
 
 # 🧩 System Architecture
     +----------------+
-    RX ---->| Edge Detector |
+    RX ---->| Edge Detector | 
 +----------------+
 |
 v
@@ -116,8 +133,33 @@ v
 +----------------+
 |
 v
-DATA_OUT
 
+---
+
+# 🔄 Internal Operation Flow
+RX Signal
+│
+▼
+Edge Detection
+│
+▼
+Measure Edge-to-Edge Time
+│
+▼
+Calculate Baud Count
+│
+▼
+Generate bit_tick & sample_tick
+│
+▼
+UART FSM Samples Data Bits
+│
+▼
+Assemble Byte
+│
+▼
+Output data_out + data_valid
+DATA_OUT
 
 ---
 
@@ -128,7 +170,7 @@ DATA_OUT
 | edge_detector | Detects transitions on the RX signal |
 | baud_counter | Measures clock cycles between edges to detect baud rate |
 | baud_tick_gen | Generates bit_tick and sample_tick signals |
-| uart_rxfsm | UART receiver state machine |
+| uart_rxfsm | UART receiver finite state machine |
 | uart_auto_baud_top | Top-level integration module |
 | uart_auto_baud_tb | Simulation testbench |
 
@@ -140,29 +182,18 @@ RTL simulation was performed using **Xilinx Vivado Simulator**.
 
 | Parameter | Value |
 |----------|------|
-| Simulation Tool | Vivado Simulator |
+| Simulation Tool | Vivado |
 | Clock Frequency | 50 MHz |
 | Clock Period | 20 ns |
 | Verification Method | Behavioral Simulation |
 
 ---
 
-# 📊 Waveform Verification
+# 📊 Simulation Waveform
 
-Simulation waveforms confirm correct functionality.
+The waveform verifies correct UART reception including edge detection, baud detection, and data sampling.
 
-| Observed Signal | Description |
-|---------------|-------------|
-| rx | UART serial input |
-| edge_pulse | Pulse generated on RX transition |
-| baud_count | Clock cycles per UART bit |
-| baud_valid | Indicates successful baud detection |
-| bit_tick | UART bit timing signal |
-| sample_tick | Sampling point inside bit |
-| data_out | Received parallel data |
-| data_valid | Indicates valid received byte |
-
-*(Waveform screenshot available in repository)*
+![Waveform](outputs/waveform.png)
 
 ---
 
@@ -190,7 +221,7 @@ RTL synthesis was performed using **Cadence Genus**.
 | Net Area | 0 |
 | Total Area | 2711.216 µm² |
 
-The design occupies a relatively small area since the UART receiver mainly consists of counters and FSM logic.
+The design occupies a relatively small area since it mainly contains counters and FSM logic.
 
 ---
 
@@ -211,21 +242,18 @@ Power distribution:
 | Logic | 6.62% |
 | Clock | 3.47% |
 
-Registers dominate power consumption due to the presence of counters and state registers.
-
 ---
 
 # ⏱ Timing Analysis
 
 | Metric | Value |
 |------|------|
-| Clock Period | 20000 ps (20 ns) |
+| Clock Period | 20 ns |
 | Worst Slack | 16101 ps |
 | Total Negative Slack | 0 |
 | Violating Paths | 0 |
-| Timing Status | ✅ Timing Met |
 
-The design comfortably meets timing constraints for a **50 MHz clock**.
+The design meets timing constraints comfortably for a **50 MHz clock**.
 
 ---
 
@@ -241,34 +269,39 @@ The design comfortably meets timing constraints for a **50 MHz clock**.
 | Terms to Net Ratio | 3.74 |
 | Terms to Instance Ratio | 4.18 |
 
-These results indicate efficient logic distribution with minimal fanout overhead.
-
 ---
 
 # 📂 Repository Structure
+uart-auto-baud/
+│
+├── rtl/
+│ ├── edge_detector.v
+│ ├── baud_counter.v
+│ ├── baud_tick_gen.v
+│ ├── uart_rxfsm.v
+│ └── uart_auto_baud_top.v
+│
+├── testbench/
+│ └── uart_auto_baud_tb.v
+│
+├── outputs/
+│ ├── waveform.png
+│ └── layout_images/
+│ └── synthesis_layout.png
+│
+└── README.md
 
-| File | Description |
-|------|-------------|
-| edge_detector.v | RX edge detection module |
-| baud_counter.v | Baud detection logic |
-| baud_tick_gen.v | Tick generation module |
-| uart_rxfsm.v | UART receiver FSM |
-| uart_auto_baud_top.v | Top-level module |
-| uart_auto_baud_tb.v | Simulation testbench |
-| waveform.png | Simulation waveform |
-| README.md | Project documentation |
 
 ---
 
-# ▶️ Running RTL Simulation
+# 📁 Folder Description
 
-| Step | Action |
-|----|-------|
-| 1 | Create a Vivado project |
-| 2 | Add all Verilog source files |
-| 3 | Set `uart_auto_baud_tb.v` as simulation top |
-| 4 | Run Behavioral Simulation |
-| 5 | Observe waveform outputs |
+| Folder | Description |
+|------|-------------|
+| rtl | Contains Verilog RTL design modules |
+| testbench | Contains the simulation testbench |
+| outputs | Contains waveform screenshots and synthesis results |
+| README.md | Project documentation |
 
 ---
 
@@ -276,9 +309,8 @@ These results indicate efficient logic distribution with minimal fanout overhead
 
 | Tool | Purpose |
 |-----|--------|
-| Verilog HDL | Hardware description |
+| Verilog HDL | Hardware description language |
 | Xilinx Vivado | RTL simulation |
 | Vivado Waveform Viewer | Signal verification |
 | Cadence Genus | RTL synthesis |
-| Cadence Genus Reports | Area, Power, Timing, QoR analysis |
-| Cadence Innovus | Layout |
+| Cadence Reports | Area, Power, Timing, QoR analysis |
