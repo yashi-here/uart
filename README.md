@@ -6,7 +6,6 @@
 ![Domain](https://img.shields.io/badge/Domain-VLSI%20Design-purple)
 
 ---
-
 ## 📌 Project Description
 
 This project implements a **UART Receiver with Auto-Baud Detection** using **Verilog HDL**.  
