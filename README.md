@@ -3,7 +3,6 @@
 ![Language](https://img.shields.io/badge/Language-Verilog-blue)
 ![Simulation](https://img.shields.io/badge/Simulation-Vivado-orange)
 ![Synthesis](https://img.shields.io/badge/Synthesis-Cadence%20Genus-green)
-![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
 ![Domain](https://img.shields.io/badge/Domain-VLSI%20Design-purple)
 
 ---
@@ -11,35 +10,35 @@
 ## 📌 Project Description
 
 This project implements a **UART Receiver with Auto-Baud Detection** using **Verilog HDL**.  
-The receiver automatically determines the baud rate using a synchronization byte (`0x55`) and configures its sampling logic accordingly.
+The receiver automatically determines the baud rate using a synchronization byte (`0x55`) and configures the sampling logic accordingly.
 
-The design demonstrates a **complete digital VLSI design flow** including:
+The project demonstrates a **complete digital VLSI design flow**, including:
 
-✔ RTL Design  
-✔ Functional Simulation (Vivado)  
-✔ Waveform Verification (Vivado & Cadence)  
-✔ RTL Synthesis (Cadence Genus)  
-✔ Gate-Level Netlist Generation  
-✔ Quality of Results (QoR) Analysis  
-✔ Area Analysis  
-✔ Power Analysis  
-✔ Timing Analysis  
+- RTL Design  
+- Functional Simulation (Vivado)  
+- Waveform Verification (Vivado & Cadence)  
+- RTL Synthesis (Cadence Genus)  
+- Gate-Level Netlist Generation  
+- Quality of Results (QoR) Analysis  
+- Area Analysis  
+- Power Analysis  
+- Timing Analysis  
 
 ---
 
 # 📊 Design Flow Coverage
 
-| Design Stage | Tool Used | Status |
-|--------------|-----------|--------|
-| RTL Design | Verilog HDL | ✅ Completed |
-| Functional Simulation | Vivado Simulator | ✅ Completed |
-| Waveform Verification | Vivado & Cadence | ✅ Completed |
-| RTL Synthesis | Cadence Genus | ✅ Completed |
-| Netlist Generation | Cadence Genus | ✅ Completed |
-| QoR Analysis | Cadence Genus | ✅ Completed |
-| Area Analysis | Cadence Genus | ✅ Completed |
-| Power Analysis | Cadence Genus | ✅ Completed |
-| Timing Analysis | Cadence Genus | ✅ Completed |
+| Design Stage | Tool Used |
+|--------------|-----------|
+| RTL Design | Verilog HDL |
+| Functional Simulation | Vivado Simulator |
+| Waveform Verification | Vivado & Cadence |
+| RTL Synthesis | Cadence Genus |
+| Netlist Generation | Cadence Genus |
+| QoR Analysis | Cadence Genus |
+| Area Analysis | Cadence Genus |
+| Power Analysis | Cadence Genus |
+| Timing Analysis | Cadence Genus |
 
 ---
 
@@ -90,7 +89,6 @@ The detected bit time matches the testbench configuration, validating correct au
 
 The receiver determines the baud rate using the synchronization byte:
 0x55
-
 Binary representation:
 01010101
 
@@ -112,8 +110,9 @@ The synchronization byte is **used only for baud detection and ignored as data**
 ---
 
 # 🧩 System Architecture
-    +----------------+
-    RX ---->| Edge Detector | 
+ +----------------+
+
+RX ---->| Edge Detector |
 +----------------+
 |
 v
@@ -133,7 +132,9 @@ v
 +----------------+
 |
 v
+DATA_OUT
 
+ 
 ---
 
 # 🔄 Internal Operation Flow
@@ -159,7 +160,7 @@ Assemble Byte
 │
 ▼
 Output data_out + data_valid
-DATA_OUT
+
 
 ---
 
@@ -290,7 +291,6 @@ uart-auto-baud/
 │ └── synthesis_layout.png
 │
 └── README.md
-
 
 ---
 
