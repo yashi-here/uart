@@ -111,31 +111,42 @@ The synchronization byte is **used only for baud detection and ignored as data**
 ---
 
 # 🧩 System Architecture
- +----------------+
-
-RX ---->| Edge Detector |
-+----------------+
-|
-v
-+----------------+
-| Baud Counter |
-| (Auto Detect) |
-+----------------+
-|
-v
-+----------------+
-| Baud Tick Gen |
-+----------------+
-|
-v
-+----------------+
-| UART RX FSM |
-+----------------+
-|
-v
-DATA_OUT
-
- 
+              +-------------------+
+              |        RX         |
+              |   Serial Input    |
+              +---------+---------+
+                        |
+                        v
+              +-------------------+
+              |   Edge Detector   |
+              | Detects RX edges  |
+              +---------+---------+
+                        |
+                        v
+              +-------------------+
+              |    Baud Counter   |
+              | Measures bit time |
+              | (Auto Baud Detect)|
+              +---------+---------+
+                        |
+                        v
+              +-------------------+
+              |   Baud Tick Gen   |
+              | Generates timing  |
+              | bit_tick / sample |
+              +---------+---------+
+                        |
+                        v
+              +-------------------+
+              |    UART RX FSM    |
+              |   Receives Data   |
+              +---------+---------+
+                        |
+                        v
+              +-------------------+
+              |      DATA_OUT     |
+              | Parallel Output   |
+              +-------------------+
 ---
 
 # 🔄 Internal Operation Flow
