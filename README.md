@@ -21,7 +21,8 @@ The project demonstrates a **complete digital VLSI design flow**, including:
 - Quality of Results (QoR) Analysis  
 - Area Analysis  
 - Power Analysis  
-- Timing Analysis  
+- Timing Analysis
+- Layout 
 
 ---
 
@@ -38,7 +39,7 @@ The project demonstrates a **complete digital VLSI design flow**, including:
 | Area Analysis | Cadence Genus |
 | Power Analysis | Cadence Genus |
 | Timing Analysis | Cadence Genus |
-
+| Layout | Cadence Innovus |
 ---
 
 # 📊 Project Overview
@@ -49,6 +50,7 @@ The project demonstrates a **complete digital VLSI design flow**, including:
 | Language | Verilog HDL |
 | Simulation Tool | Xilinx Vivado |
 | Synthesis Tool | Cadence Genus |
+| Layout Tool | Cadence Innovus |
 | Clock Frequency | 50 MHz |
 | Clock Period | 20 ns |
 | UART Frame Format | 1 Start, 8 Data, 1 Stop |
