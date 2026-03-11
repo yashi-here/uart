@@ -35,14 +35,13 @@ baud_tick_gen u3(
     .sample_tick(sample_tick),
     .bit_tick(bit_tick)
 );
-
 uart_rxfsm u4(
     .clk(clk),
     .rst(rst),
     .rx(rx),
+    .baud_valid(baud_valid),
     .sample_tick(sample_tick),
     .data_out(data_out),
     .data_valid(data_valid)
 );
-
 endmodule
