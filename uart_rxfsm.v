@@ -23,6 +23,7 @@ always @(posedge clk or posedge rst) begin
         state <= IDLE;
         bit_index <= 0;
         data_valid <= 0;
+        data_out<=8'b0;
     end
     else begin
 
@@ -67,3 +68,4 @@ always @(posedge clk or posedge rst) begin
 end
 
 endmodule
+
