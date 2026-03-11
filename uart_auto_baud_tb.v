@@ -13,7 +13,10 @@ parameter CLK_PERIOD = 20;
 
 // Bit times
 parameter BIT_TIME_115200 = 8680;
+parameter BIT_TIME_57600  = 17360;
+parameter BIT_TIME_19200  = 52080;
 parameter BIT_TIME_9600   = 104160;
+parameter BIT_TIME_4800   = 208320;
 
 //////////////////////////////////////////////////////
 // DUT
@@ -42,7 +45,7 @@ end
 
 initial begin
     rst = 1;
-    rx  = 1;      // UART idle
+    rx  = 1;
     #200;
     rst = 0;
 end
@@ -55,24 +58,23 @@ task send_uart_byte;
 input [7:0] data;
 input integer bit_time;
 integer i;
-begin
 
+begin
     $display("\n--- TRANSMIT BYTE %h ---", data);
 
-    // START BIT
+    // START
     rx = 0;
     #(bit_time);
 
-    // DATA BITS (LSB FIRST)
+    // DATA
     for(i=0;i<8;i=i+1) begin
         rx = data[i];
         #(bit_time);
     end
 
-    // STOP BIT
+    // STOP
     rx = 1;
     #(bit_time);
-
 end
 endtask
 
@@ -84,18 +86,16 @@ initial begin
 
 #20000;
 
-////////////////////////////////////////
+//////////////////////////////////////////////////
 // TEST 1 : 115200
-////////////////////////////////////////
+//////////////////////////////////////////////////
 
 $display("\n==============================");
 $display("TESTING 115200 BAUD");
 $display("==============================");
 
-// SYNC BYTE
 send_uart_byte(8'h55, BIT_TIME_115200);
 
-// allow baud detection
 #120000;
 
 send_uart_byte(8'h2C, BIT_TIME_115200);
@@ -104,9 +104,10 @@ send_uart_byte(8'h2C, BIT_TIME_115200);
 send_uart_byte(8'hC0, BIT_TIME_115200);
 #150000;
 
-////////////////////////////////////////
+
+//////////////////////////////////////////////////
 // RESET
-////////////////////////////////////////
+//////////////////////////////////////////////////
 
 $display("\nResetting DUT\n");
 rst = 1;
@@ -115,24 +116,112 @@ rst = 0;
 
 #20000;
 
-////////////////////////////////////////
-// TEST 2 : 9600
-////////////////////////////////////////
+//////////////////////////////////////////////////
+// TEST 2 : 57600
+//////////////////////////////////////////////////
+
+$display("\n==============================");
+$display("TESTING 57600 BAUD");
+$display("==============================");
+
+send_uart_byte(8'h55, BIT_TIME_57600);
+
+#200000;
+
+send_uart_byte(8'h33, BIT_TIME_57600);
+#200000;
+
+send_uart_byte(8'hF0, BIT_TIME_57600);
+#300000;
+
+
+//////////////////////////////////////////////////
+// RESET
+//////////////////////////////////////////////////
+
+$display("\nResetting DUT\n");
+rst = 1;
+#20000;
+rst = 0;
+
+#20000;
+
+//////////////////////////////////////////////////
+// TEST 3 : 19200
+//////////////////////////////////////////////////
+
+$display("\n==============================");
+$display("TESTING 19200 BAUD");
+$display("==============================");
+
+send_uart_byte(8'h55, BIT_TIME_19200);
+
+#300000;
+
+send_uart_byte(8'hA5, BIT_TIME_19200);
+#300000;
+
+send_uart_byte(8'h5A, BIT_TIME_19200);
+#400000;
+
+
+//////////////////////////////////////////////////
+// RESET
+//////////////////////////////////////////////////
+
+$display("\nResetting DUT\n");
+rst = 1;
+#20000;
+rst = 0;
+
+#20000;
+
+//////////////////////////////////////////////////
+// TEST 4 : 9600
+//////////////////////////////////////////////////
 
 $display("\n==============================");
 $display("TESTING 9600 BAUD");
 $display("==============================");
 
-// SYNC BYTE
 send_uart_byte(8'h55, BIT_TIME_9600);
 
-// allow baud detection
 #400000;
 
 send_uart_byte(8'hA8, BIT_TIME_9600);
 #200000;
 
 send_uart_byte(8'hC1, BIT_TIME_9600);
+#500000;
+
+
+//////////////////////////////////////////////////
+// RESET
+//////////////////////////////////////////////////
+
+$display("\nResetting DUT\n");
+rst = 1;
+#20000;
+rst = 0;
+
+#20000;
+
+//////////////////////////////////////////////////
+// TEST 5 : 4800
+//////////////////////////////////////////////////
+
+$display("\n==============================");
+$display("TESTING 4800 BAUD");
+$display("==============================");
+
+send_uart_byte(8'h55, BIT_TIME_4800);
+
+#600000;
+
+send_uart_byte(8'h3C, BIT_TIME_4800);
+#600000;
+
+send_uart_byte(8'hF3, BIT_TIME_4800);
 #2000000;
 
 $finish;
@@ -143,20 +232,12 @@ end
 // DEBUG SIGNALS
 //////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////
-// RX EDGE DEBUG
-//////////////////////////////////////////////////////
-
 always @(posedge dut.edge_pulse) begin
     $display("EDGE DETECTED  t=%0t  rx=%b  counter=%d",
               $time,
               dut.rx,
               dut.u2.counter);
 end
-
-//////////////////////////////////////////////////////
-// BAUD DETECTION DEBUG
-//////////////////////////////////////////////////////
 
 always @(posedge clk) begin
     if(dut.baud_valid)
@@ -165,17 +246,9 @@ always @(posedge clk) begin
                   dut.baud_count);
 end
 
-//////////////////////////////////////////////////////
-// BIT TICK DEBUG
-//////////////////////////////////////////////////////
-
 always @(posedge dut.bit_tick) begin
     $display("BIT TICK        t=%0t", $time);
 end
-
-//////////////////////////////////////////////////////
-// SAMPLE TICK DEBUG
-//////////////////////////////////////////////////////
 
 always @(posedge dut.sample_tick) begin
     $display("SAMPLE TICK     t=%0t  rx=%b  bit_index=%d",
@@ -183,10 +256,6 @@ always @(posedge dut.sample_tick) begin
               dut.rx,
               dut.u4.bit_index);
 end
-
-//////////////////////////////////////////////////////
-// FSM STATE DEBUG
-//////////////////////////////////////////////////////
 
 reg [3:0] prev_state = 0;
 
@@ -200,10 +269,6 @@ always @(posedge clk) begin
     end
 end
 
-//////////////////////////////////////////////////////
-// BIT SHIFT DEBUG
-//////////////////////////////////////////////////////
-
 always @(posedge clk) begin
     if(dut.sample_tick && dut.u4.state==2) begin
         $display("BIT SAMPLE      t=%0t  bit=%d  rx=%b  shift=%b",
@@ -214,10 +279,6 @@ always @(posedge clk) begin
     end
 end
 
-//////////////////////////////////////////////////////
-// BYTE RECEIVED
-//////////////////////////////////////////////////////
-
 always @(posedge clk) begin
     if(data_valid)
         $display("BYTE RECEIVED   t=%0t  data=%h",
@@ -225,20 +286,16 @@ always @(posedge clk) begin
                   data_out);
 end
 
-//////////////////////////////////////////////////////
-// RX LINE CHANGE
-//////////////////////////////////////////////////////
-
 always @(rx) begin
     $display("RX CHANGE       t=%0t  rx=%b", $time, rx);
 end
 
 //////////////////////////////////////////////////////
-// SIMULATION SAFETY TIMEOUT
+// SAFETY TIMEOUT
 //////////////////////////////////////////////////////
 
 initial begin
-    #5000000;
+    #10000000;
     $display("Simulation timeout");
     $finish;
 end
