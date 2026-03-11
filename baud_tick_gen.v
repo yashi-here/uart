@@ -6,7 +6,6 @@ module baud_tick_gen(
     output reg sample_tick,
     output reg bit_tick
 );
-
 reg [15:0] counter;
 
 always @(posedge clk or posedge rst) begin
@@ -15,22 +14,27 @@ always @(posedge clk or posedge rst) begin
         sample_tick <= 0;
         bit_tick <= 0;
     end
+
     else if(baud_valid) begin
 
         sample_tick <= 0;
         bit_tick <= 0;
 
-        if(counter == baud_count) begin
+        if(counter >= baud_count) begin
             counter <= 0;
             bit_tick <= 1;
         end
-        else
+        else begin
             counter <= counter + 1;
+        end
 
         if(counter == (baud_count >> 1))
             sample_tick <= 1;
 
     end
-end
 
+    else begin
+        counter <= 0;
+    end
+    end
 endmodule
