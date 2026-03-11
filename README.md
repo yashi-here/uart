@@ -15,7 +15,7 @@ The project demonstrates a **complete digital VLSI design flow**, including:
 
 - RTL Design  
 - Functional Simulation (Vivado)  
-- Waveform Verification (Vivado & Cadence)  
+- Multi-Baud Waveform Verification (Vivado & Cadence)  
 - RTL Synthesis (Cadence Genus)  
 - Gate-Level Netlist Generation  
 - Quality of Results (QoR) Analysis  
