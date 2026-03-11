@@ -1,53 +1,28 @@
-<div align="center">
-
 # 🚀 UART Receiver with Auto-Baud Detection
 
 ### Verilog Implementation | Multi-Baud UART Receiver
 
-A **Verilog-based UART receiver** capable of automatically detecting the baud rate  
-using an incoming synchronization byte (`0x55`).
-
-This project demonstrates a **complete digital design flow** including RTL design,  
-simulation, synthesis, area analysis, and power estimation.
-
----
-
-![Language](https://img.shields.io/badge/Language-Verilog-blue)
-![Simulation](https://img.shields.io/badge/Simulation-Vivado-orange)
-![Synthesis](https://img.shields.io/badge/Synthesis-Cadence%20Genus-green)
-![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
-![Domain](https://img.shields.io/badge/Domain-VLSI%20Design-purple)
-
----
-
-</div>
-
 A **Verilog-based UART receiver** capable of **automatically detecting the baud rate** using an incoming synchronization byte (`0x55`).  
+
 The receiver dynamically measures the bit period and configures the sampling logic without manual baud rate configuration.
 
-This project demonstrates the **complete digital design flow** including:
-
-✔ RTL Design  
-✔ Functional Simulation (Vivado)  
-✔ Waveform Verification  
-✔ RTL Synthesis (Cadence Genus)  
-✔ Area Analysis  
-✔ Power Analysis  
-✔ Post-Synthesis Verification  
+This project demonstrates a **complete digital VLSI design flow** including RTL design, simulation, synthesis, and physical analysis.
 
 ---
 
-# 📌 Project Status
+# 📌 Design Flow Coverage
 
-| Stage | Status |
-|------|--------|
-| RTL Design | ✅ Completed |
-| Functional Simulation | ✅ Completed |
-| Multi-Baud Verification | ✅ Completed |
-| RTL Synthesis | ✅ Completed |
-| Area Analysis | ✅ Completed |
-| Power Analysis | ✅ Completed |
-| Post-Synthesis Verification | ✅ Completed |
+| Design Stage | Tool Used |
+|--------------|-----------|
+| RTL Design | Verilog HDL |
+| Functional Simulation | Vivado Simulator |
+| Multi-Baud Waveform Verification | Vivado & Cadence |
+| RTL Synthesis | Cadence Genus |
+| Gate-Level Netlist Generation | Cadence Genus |
+| QoR Analysis | Cadence Genus |
+| Area Analysis | Cadence Genus |
+| Power Analysis | Cadence Genus |
+| Timing Analysis | Cadence Genus |
 
 ---
 
@@ -92,13 +67,15 @@ The design was verified with the following baud rates.
 | 9600 | 5208 | 104160 |
 | 4800 | 10416 | 208320 |
 
-The **detected bit time matches the testbench values**, validating correct auto-baud detection.
+The detected bit time matches the testbench configuration, validating correct auto-baud detection.
 
 ---
 
 # 🧠 Working Principle
 
-The receiver determines the baud rate using the synchronization byte:
+The receiver determines the baud rate using a synchronization byte:0x55
+
+Binary representation:01010101
 
 This pattern produces **transitions at every bit boundary**, enabling accurate measurement of the UART bit period.
 
@@ -118,28 +95,28 @@ The synchronization byte is **used only for baud detection and ignored as data**
 ---
 
 # 🧩 System Architecture
-        +----------------+
-RX ---->| Edge Detector  |
-        +----------------+
-                |
-                v
-        +----------------+
-        | Baud Counter   |
-        | (Auto Detect)  |
-        +----------------+
-                |
-                v
-        +----------------+
-        | Baud Tick Gen  |
-        +----------------+
-                |
-                v
-        +----------------+
-        | UART RX FSM    |
-        +----------------+
-                |
-                v
-             DATA_OUT
+    +----------------+
+    RX ---->| Edge Detector |
++----------------+
+|
+v
++----------------+
+| Baud Counter |
+| (Auto Detect) |
++----------------+
+|
+v
++----------------+
+| Baud Tick Gen |
++----------------+
+|
+v
++----------------+
+| UART RX FSM |
++----------------+
+|
+v
+DATA_OUT
 
 
 ---
@@ -204,28 +181,67 @@ RTL synthesis was performed using **Cadence Genus**.
 
 # 📏 Area Analysis
 
-Area utilization after synthesis:
-
 | Metric | Value |
 |------|------|
-| Total Cells | (Insert from report) |
-| Combinational Cells | (Insert value) |
-| Sequential Cells | (Insert value) |
-| Total Area | (Insert value from Genus report) |
+| Total Cell Count | 282 |
+| Combinational Cells | 204 |
+| Sequential Cells | 78 |
+| Cell Area | 2711.216 µm² |
+| Net Area | 0 |
+| Total Area | 2711.216 µm² |
+
+The design occupies a relatively small area since the UART receiver mainly consists of counters and FSM logic.
 
 ---
 
 # 🔋 Power Analysis
 
-Power estimation results:
-
 | Power Component | Value |
 |---------------|------|
-| Dynamic Power | (Insert value) |
-| Leakage Power | (Insert value) |
-| Total Power | (Insert value) |
+| Leakage Power | 1.43858e-05 W |
+| Internal Power | 1.30239e-04 W |
+| Switching Power | 9.97730e-06 W |
+| **Total Power** | **1.54602e-04 W** |
 
-Power analysis was performed using **Cadence Genus power reports**.
+Power distribution:
+
+| Component | Contribution |
+|----------|-------------|
+| Registers | 89.90% |
+| Logic | 6.62% |
+| Clock | 3.47% |
+
+Registers dominate power consumption due to the presence of counters and state registers.
+
+---
+
+# ⏱ Timing Analysis
+
+| Metric | Value |
+|------|------|
+| Clock Period | 20000 ps (20 ns) |
+| Worst Slack | 16101 ps |
+| Total Negative Slack | 0 |
+| Violating Paths | 0 |
+| Timing Status | ✅ Timing Met |
+
+The design comfortably meets timing constraints for a **50 MHz clock**.
+
+---
+
+# 📈 Quality of Results (QoR)
+
+| Metric | Value |
+|------|------|
+| Leaf Instance Count | 282 |
+| Sequential Instances | 78 |
+| Combinational Instances | 204 |
+| Max Fanout | 78 |
+| Average Fanout | 2.6 |
+| Terms to Net Ratio | 3.74 |
+| Terms to Instance Ratio | 4.18 |
+
+These results indicate efficient logic distribution with minimal fanout overhead.
 
 ---
 
@@ -238,7 +254,7 @@ Power analysis was performed using **Cadence Genus power reports**.
 | baud_tick_gen.v | Tick generation module |
 | uart_rxfsm.v | UART receiver FSM |
 | uart_auto_baud_top.v | Top-level module |
-| uart_auto_baud_tb.v | Testbench |
+| uart_auto_baud_tb.v | Simulation testbench |
 | waveform.png | Simulation waveform |
 | README.md | Project documentation |
 
@@ -264,6 +280,5 @@ Power analysis was performed using **Cadence Genus power reports**.
 | Xilinx Vivado | RTL simulation |
 | Vivado Waveform Viewer | Signal verification |
 | Cadence Genus | RTL synthesis |
-| Cadence Genus Reports | Area & Power analysis |
-
----
+| Cadence Genus Reports | Area, Power, Timing, QoR analysis |
+| Cadence Innovus | Layout |
