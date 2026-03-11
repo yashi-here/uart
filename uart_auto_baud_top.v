@@ -3,7 +3,9 @@ module uart_auto_baud_top(
     input rst,
     input rx,
     output [7:0] data_out,
-    output data_valid
+    output data_valid,
+    output [31:0] baud_rate,
+        output [31:0] bit_time_ns
 );
 
 wire edge_pulse;
@@ -24,9 +26,10 @@ baud_counter u2(
     .rst(rst),
     .edge_pulse(edge_pulse),
     .baud_count(baud_count),
-    .baud_valid(baud_valid)
+    .baud_valid(baud_valid),
+    .baud_rate(baud_rate),
+    .bit_time_ns(bit_time_ns)
 );
-
 baud_tick_gen u3(
     .clk(clk),
     .rst(rst),
