@@ -2,6 +2,7 @@ module uart_rxfsm(
     input clk,
     input rst,
     input rx,
+    input baud_valid,
     input sample_tick,
     output reg [7:0] data_out,
     output reg data_valid
@@ -30,7 +31,7 @@ always @(posedge clk or posedge rst) begin
         case(state)
 
         IDLE:
-            if(rx == 0)
+            if(rx == 0 && baud_valid)
                 state <= START;
 
         START:
