@@ -314,3 +314,5 @@ uart-auto-baud/
 | Vivado Waveform Viewer | Signal verification |
 | Cadence Genus | RTL synthesis |
 | Cadence Reports | Area, Power, Timing, QoR analysis |
+
+---
