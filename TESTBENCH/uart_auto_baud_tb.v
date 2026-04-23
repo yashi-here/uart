@@ -214,15 +214,22 @@ $display("\n==============================");
 $display("TESTING 4800 BAUD");
 $display("==============================");
 
+// TEST 5 : 4800
+
 send_uart_byte(8'h55, BIT_TIME_4800);
 
+// wait for baud detection + full frame
 #3000000;
 
 send_uart_byte(8'h3C, BIT_TIME_4800);
+
+// wait for full reception
 #3000000;
 
 send_uart_byte(8'hF3, BIT_TIME_4800);
-#2000000;
+
+// VERY IMPORTANT → allow FSM to finish
+#5000000;
 
 $finish;
 
@@ -295,7 +302,7 @@ end
 //////////////////////////////////////////////////////
 
 initial begin
-    #10000000;
+    #30000000;
     $display("Simulation timeout");
     $finish;
 end
