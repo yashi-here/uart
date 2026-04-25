@@ -4,8 +4,9 @@ module uart_auto_baud_top(
     input rx,
     output [7:0] data_out,
     output data_valid,
+    output baud_detected,
     output [31:0] baud_rate,
-        output [31:0] bit_time_ns
+    output [31:0] bit_time_ns
 );
 
 wire edge_pulse;
@@ -14,14 +15,16 @@ wire baud_valid;
 wire sample_tick;
 wire bit_tick;
 
-edge_detector u1(
+assign baud_detected = baud_valid;
+
+edge_detector u_edge_detector(
     .clk(clk),
     .rst(rst),
     .rx(rx),
     .edge_pulse(edge_pulse)
 );
 
-baud_counter u2(
+baud_counter u_baud_counter(
     .clk(clk),
     .rst(rst),
     .edge_pulse(edge_pulse),
@@ -30,7 +33,8 @@ baud_counter u2(
     .baud_rate(baud_rate),
     .bit_time_ns(bit_time_ns)
 );
-baud_tick_gen u3(
+
+baud_tick_gen u_baud_tick_gen(
     .clk(clk),
     .rst(rst),
     .baud_count(baud_count),
@@ -38,13 +42,17 @@ baud_tick_gen u3(
     .sample_tick(sample_tick),
     .bit_tick(bit_tick)
 );
-uart_rxfsm u4(
+
+uart_rxfsm u_uart_rxfsm(
     .clk(clk),
     .rst(rst),
     .rx(rx),
     .baud_valid(baud_valid),
-    .sample_tick(sample_tick),
+    .baud_count(baud_count),
     .data_out(data_out),
     .data_valid(data_valid)
 );
+
+
+
 endmodule
