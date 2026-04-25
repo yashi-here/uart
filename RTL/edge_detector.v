@@ -5,7 +5,8 @@ module edge_detector(
     output edge_pulse
 );
 
-reg rx_d1, rx_d2;
+reg rx_d1;
+reg rx_d2;
 
 always @(posedge clk or posedge rst) begin
     if (rst) begin
